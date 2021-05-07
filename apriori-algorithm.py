@@ -102,6 +102,7 @@ class Arules:
                 break
             self.k += 1
             x = l2
+        print(self.itemlist)
 
     def get_arules(self, min_support=None, min_confidence=None, min_lift=None, sort_by='lift'):
 
@@ -116,10 +117,10 @@ class Arules:
                         confidence = (self.itemlist[iter1] / self.itemlist[iter2]) * 100
                         if confidence >= min_confidence:
                             if len(b) == 1:
-                                if (confidence / count_dic[b]) != 1:
-                                    print("Confidence{}->{} = ".format(a, b), confidence)
-                            if (confidence/self.itemlist[tuple(b)]) != 1 :
-                                print("Confidence{}->{} = ".format(a, b), confidence)
+                                if (confidence / count_dic[list(b)[0]]) != 1:
+                                    print("Confidence {}->{} = ".format(a, b), confidence)
+                            elif (confidence/self.itemlist[tuple(b)]) != 1 :
+                                print("Confidence {}->{} = ".format(a, b), confidence)
             else:
                 a = iter1[0]
                 b = iter1[1]
@@ -127,14 +128,14 @@ class Arules:
                 confidence2 = (self.itemlist[iter1] / count_dic[b]) * 100
                 if confidence1 >= min_confidence:
                     if (confidence1 / count_dic[b]) != 1:
-                        print("Confidence{}->{} = ".format(a, b), confidence1)
+                        print("Confidence {}->{} = ".format(a, b), confidence1)
                 if confidence2 >= min_confidence:
                     if (confidence2 / count_dic[a]) != 1:
-                        print("Confidence{}->{} = ".format(b, a), confidence2)
+                        print("Confidence {}->{} = ".format(b, a), confidence2)
 
 
 
 arules = Arules()
-Arules.get_frequent_item_sets(arules, dataset_list, 100)
-Arules.get_arules(arules, min_support=100, min_confidence=20, min_lift=100)
+Arules.get_frequent_item_sets(arules, dataset_list, 300)
+Arules.get_arules(arules, min_support=300, min_confidence=20, min_lift=100)
 
