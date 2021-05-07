@@ -115,6 +115,9 @@ class Arules:
                         b = set(iter1) - set(iter2)
                         confidence = (self.itemlist[iter1] / self.itemlist[iter2]) * 100
                         if confidence >= min_confidence:
+                            if len(b) == 1:
+                                if (confidence / count_dic[b]) != 1:
+                                    print("Confidence{}->{} = ".format(a, b), confidence)
                             if (confidence/self.itemlist[tuple(b)]) != 1 :
                                 print("Confidence{}->{} = ".format(a, b), confidence)
             else:
