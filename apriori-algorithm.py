@@ -63,8 +63,11 @@ def check_subset_frequency(itemset, l, n):
 
 
 class Arules:
+
     def __init__(self):
-        pass
+        # self.l3 = {}
+        self.itemlist = {}
+        self.k = 2
 
     def get_frequent_item_sets(self, transactions, min_support):
         l1 = {}
@@ -72,16 +75,16 @@ class Arules:
         for i in range(len(count_number_list)):
             if count_number_list[i] >= min_support:
                 l1[count_item_list[i]] = count_number_list[i]
-        k = 2
+        self.k = 2
         x = l1
         while True:
-            if k == 2:
+            if self.k == 2:
                 x = sorted(list(x.keys()))
-                L1 = list(itertools.combinations(x, k))
-            if k > 2:
+                L1 = list(itertools.combinations(x, self.k))
+            if self.k > 2:
                 x = list(x.keys())
                 L1 = sorted(list(set([item for t in x for item in t])))
-                L1 = list(itertools.combinations(L1, k))
+                L1 = list(itertools.combinations(L1, self.k))
             c2 = {}
             l2 = {}
             for iter1 in L1:
@@ -92,18 +95,43 @@ class Arules:
                 c2[iter1] = count
             for key, value in c2.items():
                 if value >= min_support:
-                    if check_subset_frequency(key, x, k-1):
+                    if check_subset_frequency(key, x, self.k-1):
                         l2[key] = value
+                        self.itemlist[key] = value
             if not l2:
                 break
-            k += 1
+            self.k += 1
             x = l2
-            print(l2)
 
-    def get_arules(self,min_support=None, min_confidence=None,min_lift=None, sort_by='lift'):
-        pass
+    def get_arules(self, min_support=None, min_confidence=None, min_lift=None, sort_by='lift'):
+
+        for iter1 in list(self.itemlist.keys()):
+            if len(iter1) > 2:
+                k = len(iter1)
+                for j in range(2, k):
+                    subsets = list(itertools.combinations(iter1, j))
+                    for iter2 in subsets:
+                        a = iter2
+                        b = set(iter1) - set(iter2)
+                        confidence = (self.itemlist[iter1] / self.itemlist[iter2]) * 100
+                        if confidence >= min_confidence:
+                            if (confidence/self.itemlist[b]) != 1 :
+                                print("Confidence{}->{} = ".format(a, b), confidence)
+            else:
+                a = iter1[0]
+                b = iter1[1]
+                confidence1 = (self.itemlist[iter1] / count_dic[a]) * 100
+                confidence2 = (self.itemlist[iter1] / count_dic[b]) * 100
+                if confidence1 >= min_confidence:
+                    if (confidence1 / count_dic[b]) != 1:
+                        print("Confidence{}->{} = ".format(a, b), confidence1)
+                if confidence2 >= min_confidence:
+                    if (confidence2 / count_dic[a]) != 1:
+                        print("Confidence{}->{} = ".format(b, a), confidence2)
+
 
 
 arules = Arules()
-Arules.get_frequent_item_sets(arules, dataset_list, 50 )
-# '''''
+Arules.get_frequent_item_sets(arules, dataset_list, 50)
+Arules.get_arules(arules, min_support=100, min_confidence=20, min_lift=100)
+
