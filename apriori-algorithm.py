@@ -115,7 +115,7 @@ class Arules:
                         b = set(iter1) - set(iter2)
                         confidence = (self.itemlist[iter1] / self.itemlist[iter2]) * 100
                         if confidence >= min_confidence:
-                            if (confidence/self.itemlist[b]) != 1 :
+                            if (confidence/self.itemlist[tuple(b)]) != 1 :
                                 print("Confidence{}->{} = ".format(a, b), confidence)
             else:
                 a = iter1[0]
@@ -132,6 +132,6 @@ class Arules:
 
 
 arules = Arules()
-Arules.get_frequent_item_sets(arules, dataset_list, 50)
+Arules.get_frequent_item_sets(arules, dataset_list, 100)
 Arules.get_arules(arules, min_support=100, min_confidence=20, min_lift=100)
 
