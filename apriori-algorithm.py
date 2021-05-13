@@ -3,9 +3,9 @@ import itertools
 import numpy as np
 import pandas as pd
 from collections import defaultdict
-from mlxtend.frequent_patterns import apriori, association_rules
 
-dataset = pd.read_csv("/home/farinam_hz/PycharmProjects/Apriori-algorithm/Project1 - groceries.csv",
+
+dataset = pd.read_csv("Project1 - groceries.csv",
                       sep=";", header=None)
 unique_items_list = []
 dataset_list =[]
@@ -119,7 +119,7 @@ class Arules:
                             if len(b) == 1:
                                 if (confidence / count_dic[list(b)[0]]) != 1:
                                     print("Confidence {}->{} = ".format(a, b), confidence)
-                            elif (confidence/self.itemlist[tuple(b)]) != 1 :
+                            elif (confidence/self.itemlist[tuple(sorted((tuple(b))))]) != 1 :
                                 print("Confidence {}->{} = ".format(a, b), confidence)
             else:
                 a = iter1[0]
@@ -136,6 +136,6 @@ class Arules:
 
 
 arules = Arules()
-Arules.get_frequent_item_sets(arules, dataset_list, 300)
-Arules.get_arules(arules, min_support=300, min_confidence=20, min_lift=100)
+Arules.get_frequent_item_sets(arules, dataset_list, 50)
+Arules.get_arules(arules, min_support=50, min_confidence=20, min_lift=100)
 

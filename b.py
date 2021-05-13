@@ -1,0 +1,1 @@
+print(tuple(sorted(('yogurt', 'whole milk'))))
