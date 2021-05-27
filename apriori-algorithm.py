@@ -7,7 +7,7 @@ from collections import defaultdict
 
 dataset = pd.read_csv("Project1 - groceries.csv",
                       sep=";", header=None)
-unique_items_list = []
+unique_items_list = set()
 dataset_list =[]
 
 for index, row in dataset.iterrows():
@@ -17,9 +17,10 @@ for index, row in dataset.iterrows():
     for item in items_series_copy:
         if item == '':
             items_series[0].remove(item)
-        elif item not in unique_items_list:
-            unique_items_list.append(item)
+        else:
+            unique_items_list.add(item)
     dataset_list.append(items_series[0])
+unique_items_list = list(unique_items_list)
 
 inverted_index_default = defaultdict(list)
 trans_num = 0
@@ -76,7 +77,7 @@ class Arules:
             if count_number_list[i] >= min_support:
                 l1[count_item_list[i]] = count_number_list[i]
         self.k = 2
-        x = l1
+        x = l1 # {'whole milk': 3500 , ...
         while True:
             if self.k == 2:
                 x = sorted(list(x.keys()))
@@ -117,11 +118,11 @@ class Arules:
                         confidence = (self.itemlist[iter1] / self.itemlist[iter2]) * 100
                         if confidence >= min_confidence:
                             if len(b) == 1:
-                                if (confidence / count_dic[list(b)[0]]) != 1:
-                                    print("Confidence {}->{} = ".format(a, b), confidence)
+                                if (confidence / count_dic[list(b)[0]]) != 1: # Lift
+                                    print(f"Confidence {a}->{b} ={confidence}")
                             elif (confidence/self.itemlist[tuple(sorted((tuple(b))))]) != 1 :
                                 print("Confidence {}->{} = ".format(a, b), confidence)
-            else:
+            else: # 2 elements
                 a = iter1[0]
                 b = iter1[1]
                 confidence1 = (self.itemlist[iter1] / count_dic[a]) * 100
